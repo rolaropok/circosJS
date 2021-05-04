@@ -1,8 +1,8 @@
 import Track from './Track'
-import {parseSpanValueData} from '../data-parser'
-import {arc} from 'd3-shape'
+import { parseSpanValueData } from '../data-parser'
+import { arc } from 'd3-shape'
 import assign from 'lodash/assign'
-import {radial, values, common} from '../configs'
+import { radial, values, common } from '../configs'
 
 const defaultConf = assign({
   color: {
@@ -16,16 +16,17 @@ const defaultConf = assign({
 }, radial, values, common)
 
 export default class Heatmap extends Track {
-  constructor (instance, conf, data) {
+  constructor(instance, conf, data) {
     super(instance, conf, defaultConf, data, parseSpanValueData)
   }
 
-  renderDatum (parentElement, conf, layout) {
-    parentElement
-      .selectAll('tile')
+  renderDatum(parentElement, conf, layout) {
+    if (conf.border) {
+      parentElement
+        .selectAll('tile')
         .data((d) => d.values)
-      .enter()
-      .append('path')
+        .enter()
+        .append('path')
         .attr('class', 'tile')
         .attr('opacity', conf.opacity)
         .attr('d', arc()
@@ -35,22 +36,23 @@ export default class Heatmap extends Track {
           .endAngle((d, i) => this.theta(d.end, layout.blocks[d.block_id]))
         )
         .style('stroke', 'black')
-        .style('stroke-width', '1.8')
+        .style('stroke-width', '1')
         .style('fill', 'none')
+    }
 
     return parentElement
       .selectAll('tile')
-        .data((d) => d.values)
+      .data((d) => d.values)
       .enter()
       .append('path')
-        .attr('class', 'tile')
-        .attr('opacity', conf.opacity)
-        .attr('d', arc()
-          .innerRadius(conf.innerRadius)
-          .outerRadius(conf.outerRadius)
-          .startAngle((d, i) => this.theta(d.start, layout.blocks[d.block_id]))
-          .endAngle((d, i) => this.theta(d.end, layout.blocks[d.block_id]))
-        )
-        .attr('fill', conf.colorValue)
+      .attr('class', 'tile')
+      .attr('opacity', conf.opacity)
+      .attr('d', arc()
+        .innerRadius(conf.innerRadius)
+        .outerRadius(conf.outerRadius)
+        .startAngle((d, i) => this.theta(d.start, layout.blocks[d.block_id]))
+        .endAngle((d, i) => this.theta(d.end, layout.blocks[d.block_id]))
+      )
+      .attr('fill', conf.colorValue)
   }
 }

@@ -25758,13 +25758,15 @@ var Heatmap = function (_Track) {
     value: function renderDatum(parentElement, conf, layout) {
       var _this2 = this;
 
-      parentElement.selectAll('tile').data(function (d) {
-        return d.values;
-      }).enter().append('path').attr('class', 'tile').attr('opacity', conf.opacity).attr('d', (0, _d3Shape.arc)().innerRadius(conf.innerRadius).outerRadius(conf.outerRadius).startAngle(function (d, i) {
-        return _this2.theta(d.start, layout.blocks[d.block_id]);
-      }).endAngle(function (d, i) {
-        return _this2.theta(d.end, layout.blocks[d.block_id]);
-      })).style('stroke', 'black').style('stroke-width', '1.8').style('fill', 'none');
+      if (conf.border) {
+        parentElement.selectAll('tile').data(function (d) {
+          return d.values;
+        }).enter().append('path').attr('class', 'tile').attr('opacity', conf.opacity).attr('d', (0, _d3Shape.arc)().innerRadius(conf.innerRadius).outerRadius(conf.outerRadius).startAngle(function (d, i) {
+          return _this2.theta(d.start, layout.blocks[d.block_id]);
+        }).endAngle(function (d, i) {
+          return _this2.theta(d.end, layout.blocks[d.block_id]);
+        })).style('stroke', 'black').style('stroke-width', '1').style('fill', 'none');
+      }
 
       return parentElement.selectAll('tile').data(function (d) {
         return d.values;
