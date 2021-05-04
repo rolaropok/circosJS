@@ -21,6 +21,23 @@ export default class Heatmap extends Track {
   }
 
   renderDatum (parentElement, conf, layout) {
+    parentElement
+      .selectAll('tile')
+        .data((d) => d.values)
+      .enter()
+      .append('path')
+        .attr('class', 'tile')
+        .attr('opacity', conf.opacity)
+        .attr('d', arc()
+          .innerRadius(conf.innerRadius)
+          .outerRadius(conf.outerRadius)
+          .startAngle((d, i) => this.theta(d.start, layout.blocks[d.block_id]))
+          .endAngle((d, i) => this.theta(d.end, layout.blocks[d.block_id]))
+        )
+        .style('stroke', 'black')
+        .style('stroke-width', '1.8')
+        .style('fill', 'none')
+
     return parentElement
       .selectAll('tile')
         .data((d) => d.values)
