@@ -1205,7 +1205,13 @@ var Track = function () {
     this.dispatch = (0, _d3Dispatch.dispatch)('mouseover', 'mouseout');
     this.parseData = dataParser;
     this.loadData(data, instance);
+
+    console.log('getting conf - ', conf);
+
     this.conf = (0, _configUtils.getConf)(conf, defaultConf, this.meta, instance);
+
+    console.log('after changing conf - ', this.conf);
+
     this.conf.colorValue = (0, _colors.buildColorValue)(this.conf.color, this.conf.cmin, this.conf.cmax, this.conf.logScale, this.conf.logScaleBase);
     this.scale = (0, _utils.buildScale)(this.conf.cmin, this.conf.cmax, this.conf.outerRadius - this.conf.innerRadius, this.conf.logScale, this.conf.logScaleBase);
   }
@@ -10403,6 +10409,8 @@ var Core = function () {
   }, {
     key: 'heatmap',
     value: function heatmap(id, data, conf) {
+      console.log('configuration1 - ', conf);
+
       this.tracks[id] = new _Heatmap2.default(this, conf, data);
       return this;
     }
@@ -25758,6 +25766,7 @@ var Heatmap = function (_Track) {
     value: function renderDatum(parentElement, conf, layout) {
       var _this2 = this;
 
+      console.log('heatmap inner conf - ', conf);
       if (conf.border) {
         parentElement.selectAll('tile').data(function (d) {
           return d.values;

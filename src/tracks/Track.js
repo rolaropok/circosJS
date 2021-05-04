@@ -15,7 +15,13 @@ export default class Track {
     this.dispatch = dispatch('mouseover', 'mouseout')
     this.parseData = dataParser
     this.loadData(data, instance)
+
+    console.log('getting conf - ', conf);
+
     this.conf = getConf(conf, defaultConf, this.meta, instance)
+
+    console.log('after changing conf - ', this.conf);
+
     this.conf.colorValue = buildColorValue(
       this.conf.color,
       this.conf.cmin,

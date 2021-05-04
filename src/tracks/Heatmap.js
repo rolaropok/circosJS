@@ -21,6 +21,7 @@ export default class Heatmap extends Track {
   }
 
   renderDatum(parentElement, conf, layout) {
+    console.log('heatmap inner conf - ', conf);
     if (conf.border) {
       parentElement
         .selectAll('tile')
