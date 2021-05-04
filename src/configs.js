@@ -36,6 +36,10 @@ const radial = {
   outerRadius: {
     value: 0,
     iteratee: false
+  },
+  border: {
+    value: false,
+    iteratee: false
   }
 }
 

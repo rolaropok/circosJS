@@ -21,7 +21,6 @@ export default class Heatmap extends Track {
   }
 
   renderDatum(parentElement, conf, layout) {
-    console.log('heatmap inner conf - ', conf);
     if (conf.border) {
       parentElement
         .selectAll('tile')
@@ -36,8 +35,16 @@ export default class Heatmap extends Track {
           .startAngle((d, i) => this.theta(d.start, layout.blocks[d.block_id]))
           .endAngle((d, i) => this.theta(d.end, layout.blocks[d.block_id]))
         )
-        .style('stroke', 'black')
-        .style('stroke-width', '1')
+        .style('stroke', d => {
+          if (d.value === 2) return 'rgba(0,0,0,0)';
+          if (conf.cmin !== undefined && conf.cmax !== undefined) {
+            const opacity = 1 - (d.value - conf.cmin) * 0.7 / (conf.cmax - conf.cmin);
+            return `rgba(0, 0, 0, ${opacity})`;
+          }
+          const opacity = 1 - d.value * 0.7 / 10;
+          return `rgba(0, 0, 0, ${opacity})`;
+        })
+        .style('stroke-width', '2')
         .style('fill', 'none')
     }
 

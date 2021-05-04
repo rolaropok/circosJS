@@ -1205,13 +1205,7 @@ var Track = function () {
     this.dispatch = (0, _d3Dispatch.dispatch)('mouseover', 'mouseout');
     this.parseData = dataParser;
     this.loadData(data, instance);
-
-    console.log('getting conf - ', conf);
-
     this.conf = (0, _configUtils.getConf)(conf, defaultConf, this.meta, instance);
-
-    console.log('after changing conf - ', this.conf);
-
     this.conf.colorValue = (0, _colors.buildColorValue)(this.conf.color, this.conf.cmin, this.conf.cmax, this.conf.logScale, this.conf.logScaleBase);
     this.scale = (0, _utils.buildScale)(this.conf.cmin, this.conf.cmax, this.conf.outerRadius - this.conf.innerRadius, this.conf.logScale, this.conf.logScaleBase);
   }
@@ -1656,6 +1650,10 @@ var radial = {
   },
   outerRadius: {
     value: 0,
+    iteratee: false
+  },
+  border: {
+    value: false,
     iteratee: false
   }
 };
@@ -10409,8 +10407,6 @@ var Core = function () {
   }, {
     key: 'heatmap',
     value: function heatmap(id, data, conf) {
-      console.log('configuration1 - ', conf);
-
       this.tracks[id] = new _Heatmap2.default(this, conf, data);
       return this;
     }
@@ -25766,7 +25762,6 @@ var Heatmap = function (_Track) {
     value: function renderDatum(parentElement, conf, layout) {
       var _this2 = this;
 
-      console.log('heatmap inner conf - ', conf);
       if (conf.border) {
         parentElement.selectAll('tile').data(function (d) {
           return d.values;
@@ -25774,7 +25769,15 @@ var Heatmap = function (_Track) {
           return _this2.theta(d.start, layout.blocks[d.block_id]);
         }).endAngle(function (d, i) {
           return _this2.theta(d.end, layout.blocks[d.block_id]);
-        })).style('stroke', 'black').style('stroke-width', '1').style('fill', 'none');
+        })).style('stroke', function (d) {
+          if (d.value === 2) return 'rgba(0,0,0,0)';
+          if (conf.cmin !== undefined && conf.cmax !== undefined) {
+            var _opacity = 1 - (d.value - conf.cmin) * 0.7 / (conf.cmax - conf.cmin);
+            return 'rgba(0, 0, 0, ' + _opacity + ')';
+          }
+          var opacity = 1 - d.value * 0.7 / 10;
+          return 'rgba(0, 0, 0, ' + opacity + ')';
+        }).style('stroke-width', '2').style('fill', 'none');
       }
 
       return parentElement.selectAll('tile').data(function (d) {

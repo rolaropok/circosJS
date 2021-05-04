@@ -72,8 +72,6 @@ class Core {
     return this
   }
   heatmap (id, data, conf) {
-    console.log('configuration1 - ', conf);
-
     this.tracks[id] = new Heatmap(this, conf, data)
     return this
   }
